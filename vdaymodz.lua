@@ -1,14 +1,4 @@
-Đoạn code của bạn được viết rất sạch sẽ, giao diện tối ưu (OOP, caching chống lag) rất tốt! Tuy nhiên, khi đưa vào game Roblox thực tế, lý do lớn nhất khiến nó **"Không chạy được" (Bấm vào im re)** nằm ở dòng **301**:
-```lua
-store.Corners[1]:Configure({Position = UDim2.fromOffset(topX, topY), ...})
 
-```
-### 🔴 Nguyên nhân gây lỗi sập Script:
-Trong Roblox Luau, bạn **không thể tự ý thêm hàm mới vào Metatable của Instance** theo kiểu function Instance:Configure(properties) ở dòng 430 được. Khi bạn ghi như vậy, game không hiểu và sẽ báo lỗi Attempt to call a nil value (method 'Configure'), làm toàn bộ vòng lặp RenderStepped bị chết đứng ngay lập tức từ giây đầu tiên, dẫn đến việc giao diện bị đơ, không phản hồi.
-### 🟢 Cách khắc phục triệt để:
-Tui đã sửa lại hàm Configure thành một hàm độc lập chuẩn chỉnh, đồng thời sửa toàn bộ các dòng gọi hàm này trong phần vẽ **Corner Box** để script chạy mượt mà 100% trên mọi Executor (Delta, Codex, Fluxus...).
-Bạn hãy **copy toàn bộ đoạn mã đã sửa lỗi bên dưới**, dán đè vào file menu.lua trên GitHub của bạn, sau đó chạy lại lệnh loadstring trong game là menu sẽ bật lên ngay lập tức nha!
-```lua
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
